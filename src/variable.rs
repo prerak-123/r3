@@ -1,8 +1,7 @@
 use std::fmt;
 use std::marker::PhantomData;
 
-/// A variable in a formula
-/// Variable<T> represents a variable of type T
+/// `Variable<T>` represents a variable of type `T` in a formula
 #[derive(Debug)]
 pub struct Variable<T> {
     name: String,
