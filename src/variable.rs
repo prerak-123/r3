@@ -15,8 +15,9 @@ impl<T> Variable<T> {
     ///
     /// ```
     /// use r3::variable::Variable;
+    /// use r3::variable_types::TBool;
     ///
-    /// let var : Variable<bool> = Variable::new("x");
+    /// let var: Variable<TBool> = Variable::new("x");
     /// ```
     pub fn new(name: &str) -> Self {
         Variable {
@@ -31,7 +32,6 @@ impl<T> Variable<T> {
 }
 
 impl<T> fmt::Display for Variable<T> {
-    /// Note: Placeholder name `<empty-name>` is used if `self.name` is empty
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let display_string = match self.name() {
             "" => "<empty-name>",
