@@ -1,23 +1,27 @@
 use std::fmt;
 use std::marker::PhantomData;
 
-/// Type-alias for a (unique) identifier for a variable
-pub type VarId = u32;
-
 /// A variable in a formula
 /// Variable<T> represents a variable of type T
 #[derive(Debug)]
 pub struct Variable<T> {
     name: String,
-    id: VarId,
     var_type: PhantomData<T>,
 }
 
 impl<T> Variable<T> {
-    pub fn new(name: &str, id: VarId) -> Self {
+    /// Create an instance of `Variable<T>`
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use r3::variable::Variable;
+    ///
+    /// let var : Variable<bool> = Variable::new("x");
+    /// ```
+    pub fn new(name: &str) -> Self {
         Variable {
             name: String::from(name),
-            id,
             var_type: PhantomData,
         }
     }
@@ -25,14 +29,15 @@ impl<T> Variable<T> {
     pub fn name(&self) -> &str {
         self.name.as_str()
     }
-
-    pub fn id(&self) -> VarId {
-        self.id
-    }
 }
 
 impl<T> fmt::Display for Variable<T> {
+    /// Note: Placeholder name `<empty-name>` is used if `self.name` is empty
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{}", self.name)
+        let display_string = match self.name() {
+            "" => "<empty-name>",
+            non_empty => non_empty,
+        };
+        write!(f, "{}", display_string)
     }
 }
