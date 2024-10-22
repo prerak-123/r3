@@ -1,36 +1,36 @@
-mod incremental_id;
+mod incremental_id_generator;
 
-use incremental_id::IncremantalID;
+use incremental_id_generator::IncremantalIDGenerator;
 use std::collections::HashMap;
 use std::hash::Hash;
 
 #[derive(Debug)]
-pub struct IDAllocator<'a, K, Id>
+pub struct IDAllocator<'a, K, G>
 where
     K: Hash + Eq + ?Sized,
-    Id: Copy + IncremantalID,
+    G: IncremantalIDGenerator,
 {
-    id_table: HashMap<&'a K, Id>,
-    next_id: Id,
+    id_table: HashMap<&'a K, G::ID>,
+    generator: G,
 }
 
-impl<'a, K, Id> IDAllocator<'a, K, Id>
+impl<'a, K, G> IDAllocator<'a, K, G>
 where
     K: Hash + Eq + ?Sized,
-    Id: Copy + IncremantalID,
+    G: Copy + IncremantalIDGenerator,
 {
     pub fn new() -> Self {
         IDAllocator {
             id_table: HashMap::new(),
-            next_id: Id::init(),
+            generator: G::init(),
         }
     }
 
-    pub fn allocate(&mut self, val: &'a K) -> Id {
+    pub fn allocate(&mut self, val: &'a K) -> G::ID {
         match self.id_table.get(val) {
-            Some(id) => id.clone(),
+            Some(id) => *id,
             None => {
-                let new_id = self.next_id.get_and_increment();
+                let new_id = self.generator.get_and_increment();
                 self.id_table.insert(val, new_id);
                 new_id
             }
@@ -54,7 +54,7 @@ mod tests {
     fn test_allocate() {
         let name1 = String::from("hello");
         let name2 = String::from("world!");
-        let name1_copy = String::from("hello");
+        let name1_copy = name1.clone();
 
         let mut allocator: IDAllocator<'_, K, Id> = IDAllocator::new();
 
