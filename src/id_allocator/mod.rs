@@ -5,18 +5,18 @@ use std::collections::HashMap;
 use std::hash::Hash;
 
 #[derive(Debug)]
-pub struct IDAllocator<'a, K, G>
+pub struct IDAllocator<K, G>
 where
-    K: Hash + Eq + ?Sized,
+    K: Hash + Eq,
     G: IncremantalIDGenerator,
 {
-    id_table: HashMap<&'a K, G::ID>,
+    id_table: HashMap<K, G::ID>,
     generator: G,
 }
 
-impl<'a, K, G> IDAllocator<'a, K, G>
+impl<K, G> IDAllocator<K, G>
 where
-    K: Hash + Eq + ?Sized,
+    K: Hash + Eq,
     G: Copy + IncremantalIDGenerator,
 {
     pub fn new() -> Self {
@@ -26,8 +26,8 @@ where
         }
     }
 
-    pub fn allocate(&mut self, val: &'a K) -> G::ID {
-        match self.id_table.get(val) {
+    pub fn allocate(&mut self, val: K) -> G::ID {
+        match self.id_table.get(&val) {
             Some(id) => *id,
             None => {
                 let new_id = self.generator.get_and_increment();
@@ -47,7 +47,7 @@ mod tests {
 
     #[test]
     fn test_create() {
-        let _: IDAllocator<'_, K, Id> = IDAllocator::new();
+        let _: IDAllocator<&K, Id> = IDAllocator::new();
     }
 
     #[test]
@@ -56,7 +56,7 @@ mod tests {
         let name2 = String::from("world!");
         let name1_copy = name1.clone();
 
-        let mut allocator: IDAllocator<'_, K, Id> = IDAllocator::new();
+        let mut allocator: IDAllocator<&K, Id> = IDAllocator::new();
 
         let id1 = allocator.allocate(name1.as_str());
         let id2 = allocator.allocate(name2.as_str());
