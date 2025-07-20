@@ -48,7 +48,7 @@ where
 impl<K, G> IDAllocator<K, G>
 where
     K: Hash + Eq,
-    G: Copy + IncremantalIDGenerator,
+    G: IncremantalIDGenerator,
 {
     pub fn new() -> Self {
         IDAllocator {
