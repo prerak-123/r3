@@ -35,6 +35,7 @@ where
     }
 }
 
+/// An IDAllocator to allocate unique IDs to unique keys
 #[derive(Debug)]
 pub struct IDAllocator<K, G>
 where
