@@ -1,6 +1,4 @@
-mod incremental_id_generator;
-
-use incremental_id_generator::IncremantalIDGenerator;
+use super::incremental_id_generator::IncremantalIDGenerator;
 use std::collections::HashMap;
 use std::hash::Hash;
 
