@@ -5,7 +5,7 @@ use std::collections::HashMap;
 use std::hash::Hash;
 
 #[derive(Debug)]
-enum AllocatedID<T> {
+pub enum AllocatedID<T> {
     New(T),
     Repeat(T),
 }
