@@ -57,6 +57,10 @@ where
         }
     }
 
+    pub fn num_allocated(&self) -> usize {
+        self.id_table.len()
+    }
+
     pub fn allocate(&mut self, val: K) -> AllocatedID<G::ID> {
         match self.id_table.get(&val) {
             Some(id) => AllocatedID::Repeat(*id),
