@@ -1,4 +1,6 @@
 /* Public modules and exports */
+pub mod sat;
+
 pub mod variable;
 
 pub mod variable_types;
